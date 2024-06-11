@@ -2,24 +2,39 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import HyperExpress from 'hyper-express';
-import WebSocket, { WebSocketServer } from 'ws';
+import type { Connections } from './types';
+import { handleMessage } from './messages';
 
 const app = new HyperExpress.Server();
 const PORT = +process.env.PORT || 3000;
 
-const wss = new WebSocketServer({ noServer: true });
+const connections: Connections = {};
 
-wss.on('connection', (ws: WebSocket) => {
-  ws.on('message', (message) => {
-    const data = JSON.parse(message.toString());
-    console.log('WS Received: ', data);
+app.ws('/connect', (ws) => {
+  console.log('New WS connection');
 
-    wss.clients.forEach((client) => {
-      if (client !== ws && client.readyState === WebSocket.OPEN) {
-        client.send(message);
-      }
-    });
+  const id = Math.random().toString(36).slice(2, 9);
+
+  connections[id] = { ws, open: false, pending: [], allowed: [] };
+
+  console.log('Client ID:', id);
+
+  ws.on('message', (msg) => {
+    const data = JSON.parse(msg.toString());
+    console.log('Received message:', data);
+    try {
+      handleMessage({ id, ws, data, connections });
+    } catch (e) {
+      console.error(`[ERROR]: ${id}`, e.message);
+      ws.send(JSON.stringify({ error: e.message }));
+    }
+  });
+
+  ws.on('close', () => {
+    delete connections[id];
   });
 });
 
-app.listen(PORT);
+app.listen(PORT, () => {
+  console.log('Server is running on port', PORT);
+});
