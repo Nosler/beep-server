@@ -1,13 +1,13 @@
 import { Websocket } from 'hyper-express';
 import { Connections } from '../types';
 import {
-  ZMessage,
-  MessageType,
-  ZListenMessage,
-  ZConnectMessage,
+  ZWSMessage,
+  WSMessageTypes,
+  ZWSMatchMessage,
+  ZWSSignalMessage,
 } from './messageTypes';
-import { handleListenMessage } from './listen';
-import { handleConnectMessage } from './connect';
+import { handleMatchMessage } from './match';
+import { handleSignalMessage } from './signal';
 
 interface HandleMessageArgs {
   id: string;
@@ -17,19 +17,19 @@ interface HandleMessageArgs {
 }
 
 export function handleMessage(props: HandleMessageArgs) {
-  const message = ZMessage.passthrough().parse(props.data);
+  const message = ZWSMessage.passthrough().parse(props.data);
 
   switch (message.type) {
-    case MessageType.enum.LISTEN:
-      handleListenMessage({
+    case WSMessageTypes.enum.MATCH:
+      handleMatchMessage({
         ...props,
-        message: ZListenMessage.parse(message),
+        message: ZWSMatchMessage.parse(message),
       });
       break;
-    case MessageType.enum.CONNECT:
-      handleConnectMessage({
+    case WSMessageTypes.enum.SIGNAL:
+      handleSignalMessage({
         ...props,
-        message: ZConnectMessage.parse(message),
+        message: ZWSSignalMessage.parse(message),
       });
       break;
   }

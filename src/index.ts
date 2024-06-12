@@ -14,8 +14,9 @@ app.ws('/connect', (ws) => {
   console.log('New WS connection');
 
   const id = Math.random().toString(36).slice(2, 9);
+  ws.send(JSON.stringify({ type: 'ID', id }));
 
-  connections[id] = { ws, open: false, pending: [], allowed: [] };
+  connections[id] = { ws };
 
   console.log('Client ID:', id);
 
