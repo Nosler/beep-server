@@ -1,17 +1,29 @@
 import { Websocket } from 'hyper-express';
 import { WSMatchMessage } from './messageTypes';
 import { Connections } from '../types';
+import { createMatchMessage } from './createMessage';
 
 interface handleMatchMessageArgs {
   id: string;
   ws?: Websocket;
-  message?: WSMatchMessage;
+  message: WSMatchMessage;
   connections: Connections;
 }
 
 export function handleMatchMessage({
   id,
   connections,
+  message,
 }: handleMatchMessageArgs) {
-  //connections[id].open = true;
+  const peerId = message.peerId;
+  if (peerId === id) {
+    throw new Error("You don't need us to connect to yourself :)");
+  }
+  if (!(peerId in connections)) {
+    throw new Error(`Peer ${peerId} not found.`);
+  }
+
+  const peer = connections[peerId];
+  const out = createMatchMessage(id, peerId);
+  peer.ws.send(JSON.stringify(out));
 }

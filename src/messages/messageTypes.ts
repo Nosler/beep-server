@@ -14,6 +14,7 @@ export const ZWSIdMessage = ZWSMessage.extend({
 export const ZWSMatchMessage = ZWSMessage.extend({
   type: z.literal(WSMessageTypes.enum.MATCH),
   peerId: z.string(),
+  id: z.string(),
 });
 
 export const ZWSSignalMessage = ZWSMessage.extend({

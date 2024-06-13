@@ -27,7 +27,7 @@ app.ws('/connect', (ws) => {
       handleMessage({ id, ws, data, connections });
     } catch (e) {
       console.error(`[ERROR]: ${id}`, e.message);
-      ws.send(JSON.stringify({ error: e.message }));
+      ws.send(JSON.stringify({ type: 'ERROR', error: e.message }));
     }
   });
 
