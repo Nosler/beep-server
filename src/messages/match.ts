@@ -16,9 +16,6 @@ export function handleMatchMessage({
   message,
 }: handleMatchMessageArgs) {
   const peerId = message.peerId;
-  if (peerId === id) {
-    throw new Error("You don't need us to connect to yourself :)");
-  }
   if (!(peerId in connections)) {
     throw new Error(`Peer ${peerId} not found.`);
   }

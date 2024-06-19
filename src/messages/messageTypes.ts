@@ -8,22 +8,22 @@ export const ZWSMessage = z.object({
 
 export const ZWSIdMessage = ZWSMessage.extend({
   type: z.literal(WSMessageTypes.enum.ID),
-  id: z.string(),
 });
 
 export const ZWSMatchMessage = ZWSMessage.extend({
   type: z.literal(WSMessageTypes.enum.MATCH),
   peerId: z.string(),
-  id: z.string(),
 });
 
-export const ZWSSignalMessage = ZWSMessage.extend({
-  type: z.literal(WSMessageTypes.enum.SIGNAL),
-  peerId: z.string(),
-  id: z.string(),
-  data: z.any(),
-});
+export interface MessageMatchers {
+  MATCH: WSMatchMessage;
+  ID: WSIdMessage;
+}
 
+export type MessageTypes = z.infer<typeof WSMessageTypes>;
 export type WSMessage = z.infer<typeof ZWSMessage>;
+export type WSIdMessage = z.infer<typeof ZWSIdMessage>;
 export type WSMatchMessage = z.infer<typeof ZWSMatchMessage>;
-export type WSSignalMessage = z.infer<typeof ZWSSignalMessage>;
+
+export type ReceivableMessage = WSMatchMessage;
+export type Out<T extends ReceivableMessage> = T | { id: string };

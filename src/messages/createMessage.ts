@@ -1,21 +1,9 @@
-import {
-  WSMatchMessage,
-  WSMessageTypes,
-  WSSignalMessage,
-} from './messageTypes';
+import { Out, WSMatchMessage, WSMessageTypes } from './messageTypes';
 
-export function createSignalMessage(
-  data: unknown,
+export function createMatchMessage(
+  id: string,
   peerId: string,
-): WSSignalMessage {
-  return {
-    type: WSMessageTypes.enum.SIGNAL,
-    peerId,
-    data,
-  };
-}
-
-export function createMatchMessage(peerId: string, id: string): WSMatchMessage {
+): Out<WSMatchMessage> {
   return {
     type: WSMessageTypes.enum.MATCH,
     peerId,
