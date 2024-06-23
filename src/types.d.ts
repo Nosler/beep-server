@@ -10,7 +10,6 @@ export interface Connection {
    * Destinations of messages
    */
   listeners: string[];
-
   /**
    * The currently awaited connection.
    */
