@@ -4,6 +4,7 @@ dotenv.config();
 import HyperExpress from 'hyper-express';
 import type { Connections } from './types';
 import { handleMessage } from './messages';
+import { newConnection } from './connect';
 
 const app = new HyperExpress.Server();
 const PORT = +process.env.PORT || 3000;
@@ -16,7 +17,7 @@ app.ws('/connect', (ws) => {
   const id = Math.random().toString(36).slice(2, 9);
   ws.send(JSON.stringify({ type: 'ID', id }));
 
-  connections[id] = { ws };
+  connections[id] = newConnection(ws);
 
   console.log('Client ID:', id);
 

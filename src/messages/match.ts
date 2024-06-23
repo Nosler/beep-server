@@ -1,12 +1,12 @@
 import { Websocket } from 'hyper-express';
-import { WSMatchMessage } from './messageTypes';
+import { MatchMessage } from './messageValidators';
 import { Connections } from '../types';
 import { createMatchMessage } from './createMessage';
 
 interface handleMatchMessageArgs {
   id: string;
   ws?: Websocket;
-  message: WSMatchMessage;
+  message: MatchMessage;
   connections: Connections;
 }
 
