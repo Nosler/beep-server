@@ -17,8 +17,22 @@ function getNext(connections: Connections, id: string) {
     return;
   }
 
-  const nextId = connection.pendingQueue.shift();
+  const nextId = connection.pendingQueue.shift() as string;
+  connection.pending = nextId;
   connection.ws.send(JSON.stringify(createRequestMessage(nextId, id)));
+}
+
+export function match(connections: Connections, from: string, to: string) {
+  const connection = connections[from];
+  if (connection.pending !== to) {
+    throw new Error('Id not pending.');
+  }
+
+  connection.senders.push(to);
+  connection.pending = undefined;
+  connections[to].listeners.push(from);
+
+  getNext(connections, from);
 }
 
 export function rejectListen(

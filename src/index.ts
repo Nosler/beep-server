@@ -5,9 +5,10 @@ import HyperExpress from 'hyper-express';
 import type { Connections } from './types';
 import { handleMessage } from './messages';
 import { newConnection } from './connect';
+import { createErrorMessage } from './messages/createMessage';
 
 const app = new HyperExpress.Server();
-const PORT = +process.env.PORT || 3000;
+const PORT = +(process.env.PORT || '3000');
 
 const connections: Connections = {};
 
@@ -27,8 +28,12 @@ app.ws('/connect', (ws) => {
     try {
       handleMessage({ id, ws, data, connections });
     } catch (e) {
-      console.error(`[ERROR]: ${id}`, e.message);
-      ws.send(JSON.stringify({ type: 'ERROR', error: e.message }));
+      if (e instanceof Error) {
+        console.error(`[ERROR]: ${id}`, e?.message);
+        ws.send(JSON.stringify(createErrorMessage(e.message)));
+      } else {
+        console.error(e);
+      }
     }
   });
 

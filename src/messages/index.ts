@@ -5,9 +5,11 @@ import {
   MessageTypes,
   ZMatchMessage,
   ZRequestMessage,
+  ZClickMessage,
 } from './messageValidators';
 import { handleMatchMessage } from './match';
 import { handleRequestMessage } from './request';
+import { handleClickMessage } from './click';
 
 interface HandleMessageArgs {
   id: string;
@@ -32,5 +34,10 @@ export function handleMessage(props: HandleMessageArgs) {
         message: ZMatchMessage.parse(message),
       });
       break;
+    case MessageTypes.enum.CLICK:
+      handleClickMessage({
+        ...props,
+        message: ZClickMessage.parse(message),
+      });
   }
 }
