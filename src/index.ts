@@ -29,7 +29,7 @@ app.ws('/connect', (ws) => {
       handleMessage({ id, ws, data, connections });
     } catch (e) {
       if (e instanceof Error) {
-        console.error(`[ERROR]: ${id}`, e?.message);
+        console.error(`[ERROR]: ${id}\n` + e?.message);
         ws.send(JSON.stringify(createErrorMessage(e.message)));
       } else {
         console.error(e);
@@ -45,3 +45,12 @@ app.ws('/connect', (ws) => {
 app.listen(PORT, () => {
   console.log('Server is running on port', PORT);
 });
+
+const shutdown = () => {
+  console.log('Shutting down server');
+  app.close();
+  process.exit(0);
+};
+
+process.on('SIGINT', shutdown);
+process.on('SIGTERM', shutdown);

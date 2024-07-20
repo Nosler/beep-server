@@ -31,11 +31,15 @@ export function createRequestMessage(from: string, to: string): Out<RequestMessa
   };
 }
 
-export function createClickMessage(from: string, to: string, button: string): Out<ClickMessage> {
+export function createClickMessage(
+  from: string,
+  to: string,
+  buttonIndex: number,
+): Out<ClickMessage> {
   return {
     type: MessageTypes.enum.CLICK,
     id: to,
     peerId: from,
-    button,
+    buttonIndex,
   };
 }

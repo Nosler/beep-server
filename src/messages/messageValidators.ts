@@ -29,7 +29,7 @@ export const ZRequestMessage = ZMessage.extend({
 export const ZClickMessage = ZMessage.extend({
   type: z.literal(MessageTypes.enum.CLICK),
   peerId: z.string(),
-  button: z.string(),
+  buttonIndex: z.number(),
 });
 
 export type MessageTypes = z.infer<typeof MessageTypes>;

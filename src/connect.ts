@@ -2,11 +2,7 @@ import { createRequestMessage } from './messages/createMessage';
 import { Connection, Connections } from './types';
 import { Websocket } from 'hyper-express';
 
-export function requestListen(
-  connections: Connections,
-  from: string,
-  to: string,
-) {
+export function requestListen(connections: Connections, from: string, to: string) {
   connections[to].pendingQueue.push(from);
   getNext(connections, to);
 }
@@ -22,24 +18,20 @@ function getNext(connections: Connections, id: string) {
   connection.ws.send(JSON.stringify(createRequestMessage(nextId, id)));
 }
 
-export function match(connections: Connections, from: string, to: string) {
-  const connection = connections[from];
-  if (connection.pending !== to) {
+export function match(connections: Connections, listener: string, sender: string) {
+  const connection = connections[listener];
+  if (connection.pending !== sender) {
     throw new Error('Id not pending.');
   }
 
-  connection.senders.push(to);
+  connection.senders.push(sender);
   connection.pending = undefined;
-  connections[to].listeners.push(from);
+  connections[sender].listeners.push(listener);
 
-  getNext(connections, from);
+  getNext(connections, listener);
 }
 
-export function rejectListen(
-  connections: Connections,
-  from: string,
-  to: string,
-) {
+export function rejectListen(connections: Connections, from: string, to: string) {
   const connection = connections[to];
   if (connection.pending === from) {
     connection.pending = undefined;

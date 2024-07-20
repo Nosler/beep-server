@@ -15,7 +15,7 @@ export interface Connection {
    */
   requested?: string;
   /**
-   * The currently pending connection.
+   * The currently pending connection for a listener.
    * // TODO: Might have to work with race conditions if moving to multiple threads.
    */
   pending?: string;

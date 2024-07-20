@@ -12,12 +12,12 @@ interface handleClickMessageArgs {
 
 export function handleClickMessage({ id, message, connections }: handleClickMessageArgs) {
   const peerId = message.peerId;
-  if (!(peerId in connections[id].listeners)) {
+  if (!connections[id].listeners.includes(peerId)) {
     throw new Error('Peer not listening!');
   }
   if (!(peerId in connections)) {
     throw new Error('Peer not connected!');
   }
-  const out = createClickMessage(id, peerId, message.button);
+  const out = createClickMessage(id, peerId, message.buttonIndex);
   connections[peerId].ws.send(JSON.stringify(out));
 }
