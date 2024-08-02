@@ -6,14 +6,15 @@
     version: main
 
 - name: Install npm dependencies
-  community.general.pnpm:
-    path: "{{ app_path }}"
-    state: present
+  command: pnpm i -D
 
 - name: Build the application
   command: pnpm run build
   args:
     chdir: "{{ app_path }}"
+
+- name: Remove dev dependencies
+  command: pnpm i -P
 
 - name: Configure Nginx
   template:
