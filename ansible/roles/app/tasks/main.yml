@@ -6,7 +6,7 @@
     version: main
 
 - name: Install npm dependencies
-  pnpm:
+  community.general.pnpm:
     path: "{{ app_path }}"
     state: present
 
