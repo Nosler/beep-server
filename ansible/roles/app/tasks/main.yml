@@ -6,7 +6,7 @@
     version: main
 
 - name: Install npm dependencies
-  command: pnpm i
+  command: pnpm i --frozen-lockfile
   args:
     chdir: "{{ app_path }}"
   become_user: linuxuser
