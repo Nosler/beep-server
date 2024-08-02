@@ -6,19 +6,22 @@
     version: main
 
 - name: Install npm dependencies
-  command: "{{ pnpm_path }} i -D"
+  command: pnpm i -D
   args:
     chdir: "{{ app_path }}"
+  become_user: linuxuser
 
 - name: Build the application
-  command: "{{ pnpm_path }} run build"
+  command: pnpm run build
   args:
     chdir: "{{ app_path }}"
-
+  become_user: linuxuser
+  
 - name: Remove dev dependencies
-  command: "{{ pnpm_path }} i -P"
+  command: pnpm i -P
   args:
     chdir: "{{ app_path }}"
+  become_user: linuxuser
     
 - name: Configure Nginx
   template:
@@ -42,6 +45,9 @@
   args:
     chdir: "{{ app_path }}"
   ignore_errors: yes
+  become_user: linuxuser
 
 - name: Save PM2 process list
   command: pm2 save
+  become_user: linuxuser
+
