@@ -20,7 +20,7 @@
   become_user: linuxuser
   
 - name: Remove dev dependencies
-  command: pnpm prune -P
+  command: pnpm prune --prod
   args:
     chdir: "{{ app_path }}"
   become_user: linuxuser
