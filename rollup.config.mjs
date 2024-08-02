@@ -7,15 +7,15 @@ import { del } from '@kineticcafe/rollup-plugin-delete'
 export default {
   input: 'build/src/index.js',
   output: {
-    file: 'build/index.js',
-    format: 'cjs', // immediately-invoked function expression — suitable for <script> tags
+    file: 'build/index.mjs',
+    format: 'es',
     sourcemap: false
   },
   plugins: [
-    resolve(), // tells Rollup how to find date-fns in node_modules
-    commonjs(), // converts date-fns to ES modules
+    resolve(),
+    commonjs(),
     json(),
-    terser(), // minify
+    terser(),
     del({ targets: 'build/src', hook: 'writeBundle' })
   ]
 };
