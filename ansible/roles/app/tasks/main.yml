@@ -6,12 +6,12 @@
     version: main
 
 - name: Install npm dependencies
-  npm:
+  pnpm:
     path: "{{ app_path }}"
     state: present
 
 - name: Build the application
-  command: npm run build
+  command: pnpm run build
   args:
     chdir: "{{ app_path }}"
 
