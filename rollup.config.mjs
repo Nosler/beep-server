@@ -8,7 +8,7 @@ export default {
   input: 'build/src/index.js',
   output: {
     file: 'build/index.js',
-    format: 'esm', // immediately-invoked function expression — suitable for <script> tags
+    format: 'cjs', // immediately-invoked function expression — suitable for <script> tags
     sourcemap: false
   },
   plugins: [
