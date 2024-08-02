@@ -1,0 +1,42 @@
+---
+- name: Pull the latest code
+  git:
+    repo: "{{ app_repo }}"
+    dest: "{{ app_path }}"
+    version: main
+
+- name: Install npm dependencies
+  npm:
+    path: "{{ app_path }}"
+    state: present
+
+- name: Build the application
+  command: npm run build
+  args:
+    chdir: "{{ app_path }}"
+
+- name: Configure Nginx
+  template:
+    src: nginx.conf.j2
+    dest: /etc/nginx/sites-available/{{ app_name }}
+    mode: 0644
+
+- name: Enable Nginx site
+  file:
+    src: /etc/nginx/sites-available/{{ app_name }}
+    dest: /etc/nginx/sites-enabled/{{ app_name }}
+    state: link
+
+- name: Reload Nginx
+  service:
+    name: nginx
+    state: reloaded
+
+- name: Start the application with PM2
+  command: pm2 restart all
+  args:
+    chdir: "{{ app_path }}"
+  ignore_errors: yes
+
+- name: Save PM2 process list
+  command: pm2 save

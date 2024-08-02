@@ -1,0 +1,7 @@
+---
+- hosts: local
+  become: true
+  vars_files:
+    - roles/app/vars/main.yml
+  roles:
+    - app
