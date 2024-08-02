@@ -12,6 +12,14 @@ const PORT = +(process.env.PORT || '3000');
 
 const connections: Connections = {};
 
+app.get('/', (_, res) => {
+  res.redirect('github.com/Nosler/beep')
+});
+
+app.get('/livez', (_, res) => {
+  res.send('Hey ;3');
+})
+
 app.ws('/connect', (ws) => {
   console.log('New WS connection');
 
