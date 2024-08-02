@@ -7,6 +7,7 @@ module.exports = {
       exec_mode: 'cluster', // For load balancing between instances
       env: {
         NODE_ENV: 'production',
+        PORT: '3000',
       }
     }
   ]
