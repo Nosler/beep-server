@@ -6,17 +6,17 @@
     version: main
 
 - name: Install npm dependencies
-  command: pnpm i -D
+  command: "{{ pnpm_path }} i -D"
   args:
     chdir: "{{ app_path }}"
 
 - name: Build the application
-  command: pnpm run build
+  command: "{{ pnpm_path }} run build"
   args:
     chdir: "{{ app_path }}"
 
 - name: Remove dev dependencies
-  command: pnpm i -P
+  command: "{{ pnpm_path }} i -P"
   args:
     chdir: "{{ app_path }}"
     
