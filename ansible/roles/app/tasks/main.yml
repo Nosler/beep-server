@@ -6,10 +6,12 @@
     version: main
 
 - name: Install npm dependencies
-  command: pnpm i -D
+  command: pnpm i
   args:
     chdir: "{{ app_path }}"
   become_user: linuxuser
+  environment:
+    NODE_ENV: "development"
 
 - name: Build the application
   command: pnpm run build
