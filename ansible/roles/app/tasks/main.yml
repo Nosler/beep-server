@@ -7,6 +7,8 @@
 
 - name: Install npm dependencies
   command: pnpm i -D
+  args:
+    chdir: "{{ app_path }}"
 
 - name: Build the application
   command: pnpm run build
@@ -15,7 +17,9 @@
 
 - name: Remove dev dependencies
   command: pnpm i -P
-
+  args:
+    chdir: "{{ app_path }}"
+    
 - name: Configure Nginx
   template:
     src: nginx.conf.j2
