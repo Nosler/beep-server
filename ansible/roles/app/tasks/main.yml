@@ -14,17 +14,17 @@
     NODE_ENV: "development"
 
 - name: Build the application
-  command: pnpm run build
+  command: pnpm run build:release
   args:
     chdir: "{{ app_path }}"
   become_user: linuxuser
-  
+
 - name: Remove dev dependencies
   command: pnpm prune --prod
   args:
     chdir: "{{ app_path }}"
   become_user: linuxuser
-    
+
 - name: Configure Nginx
   template:
     src: nginx.conf.j2
