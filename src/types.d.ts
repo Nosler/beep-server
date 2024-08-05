@@ -1,7 +1,11 @@
 import type { Websocket } from 'hyper-express';
 
+export interface CurrentConnectionData {
+  id?: string;
+}
+
 export interface Connection {
-  ws: Websocket;
+  ws?: Websocket;
   /**
    * Sources of messages.
    */
@@ -16,7 +20,6 @@ export interface Connection {
   requested?: string;
   /**
    * The currently pending connection for a listener.
-   * // TODO: Might have to work with race conditions if moving to multiple threads.
    */
   pending?: string;
   /**

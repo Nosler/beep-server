@@ -1,3 +1,4 @@
+import { InvalidDataError } from './errors';
 import { createRequestMessage } from './messages/createMessage';
 import { Connection, Connections } from './types';
 import { Websocket } from 'hyper-express';
@@ -15,13 +16,19 @@ function getNext(connections: Connections, id: string) {
 
   const nextId = connection.pendingQueue.shift() as string;
   connection.pending = nextId;
-  connection.ws.send(JSON.stringify(createRequestMessage(nextId, id)));
+  connection.ws!.send(JSON.stringify(createRequestMessage(nextId, id)));
 }
 
 export function match(connections: Connections, listener: string, sender: string) {
   const connection = connections[listener];
+
+  if (sender in connection.listeners) {
+    // if updating sounds
+    return;
+  }
+
   if (connection.pending !== sender) {
-    throw new Error('Id not pending.');
+    throw new InvalidDataError('Id not pending.');
   }
 
   connection.senders.push(sender);
@@ -45,3 +52,25 @@ export const newConnection = (ws: Websocket): Connection => ({
   pendingQueue: [],
   senders: [],
 });
+
+export const deleteConnection = (connections: Connections, id: string) => {
+  for (const senderId of connections[id].senders) {
+    connections[senderId].listeners = connections[senderId].listeners.filter((lid) => lid !== id);
+  }
+  for (const listenerId of connections[id].listeners) {
+    connections[listenerId].senders = connections[listenerId].senders.filter((sid) => sid !== id);
+  }
+  delete connections[id];
+};
+
+export const disconnectUser = (connections: Connections, id: string) => {
+  const user = connections[id];
+  for (const nextId of [...user.pendingQueue, user.pending]) {
+    if (nextId) {
+      connections[nextId].ws?.send(JSON.stringify({ type: 'Error', message: 'Peer not found.' }));
+    }
+  }
+  user.pendingQueue = [];
+  user.pending = undefined;
+  user.ws = undefined;
+};

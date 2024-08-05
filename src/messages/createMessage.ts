@@ -16,10 +16,11 @@ export function createMatchMessage(from: string, to: string, buttons: string[]):
   };
 }
 
-export function createErrorMessage(error: string): ErrorMessage {
+export function createErrorMessage(error: string, code: number): ErrorMessage {
   return {
     type: MessageTypes.enum.ERROR,
     error,
+    code,
   };
 }
 
