@@ -2,7 +2,7 @@ import { Websocket } from 'hyper-express';
 import { Connections, CurrentConnectionData } from '../types';
 import { LoginMessage } from './messageValidators';
 import jwt from 'jsonwebtoken';
-import { EnvironmentError, InvalidTokenError, UserNotFoundError } from '../errors';
+import { EnvironmentError, InvalidTokenError } from '../errors';
 
 interface handleLoginMessageArgs {
   ctx: CurrentConnectionData;
