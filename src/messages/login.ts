@@ -16,21 +16,22 @@ export const handleLoginMessage = ({ ctx, ws, connections, message }: handleLogi
   if (!secret) {
     throw new EnvironmentError('JWT_SECRET');
   }
+  const token = message.token;
   let id: string;
   try {
-    const payload = jwt.verify(message.token, secret) as { id: string };
+    const payload = jwt.verify(token, secret) as { id: string };
     id = payload.id;
   } catch (e) {
     throw new InvalidTokenError();
   }
 
   if (!connections[id]) {
-    throw new UserNotFoundError(id);
+    throw new InvalidTokenError(id);
   }
 
   ctx.id = id;
   connections[id].ws = ws;
 
-  const out = { type: 'LOGIN', id };
+  const out = { type: 'ID', id, token };
   ws.send(JSON.stringify(out));
 };

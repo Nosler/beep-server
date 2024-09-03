@@ -27,13 +27,13 @@ export const handleNewIdMessage = ({ ctx, ws, connections }: handleNewIdMessageA
 
   connections[id] = userData;
 
-  const secret = process.env.JWT_SECRET as string | undefined;
+  const secret = process.env.JWT_SECRET;
   if (!secret) {
     throw new EnvironmentError('JWT_SECRET');
   }
 
-  const token = jwt.sign({ id }, secret as string, { expiresIn: '7d' });
+  const token = jwt.sign({ id }, secret as string, { expiresIn: '7d', algorithm: 'HS256' });
 
-  const out = { type: 'ID', token };
+  const out = { type: 'ID', token, id };
   ws.send(JSON.stringify(out));
 };

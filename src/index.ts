@@ -12,6 +12,9 @@ import { BeepError } from './errors';
 const app = new HyperExpress.Server();
 const PORT = +(process.env.PORT || '3000');
 
+Logger.useDefaults();
+Logger.setLevel(process.env.NODE_ENV === 'production' ? Logger.INFO : Logger.DEBUG);
+
 const connections: Connections = {};
 
 app.get('/', (_, res) => {
