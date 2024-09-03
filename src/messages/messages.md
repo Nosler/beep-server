@@ -12,10 +12,25 @@
     type: MessageType;
   }
   ```
-- `IdMessage`: Message requesting an ID.
+- `NewIdMessage`: For requesting a new id from the server.
   ```ts
   interface NewIdMessage extends Message {
     type: 'NEWID';
+  }
+  ```
+- `LoginMessage`: For authorizing a token.
+  ```ts
+  interface LoginMessage extends Message {
+    type: 'NEWID';
+    token: string;
+  }
+  ```
+- `IdMessage`: Assignment of token and id to client.
+  ```ts
+  interface IdMessage extends Message {
+    type: 'NEWID';
+    token: string;
+    id: string;
   }
   ```
 - `RequestMessage`: For requesting a connection from a listener, as a sender.
@@ -44,9 +59,14 @@
 
 # Timeline
 
-Given users `S` (sender), `L` (listener) and the webserver (`W`). `L` has `L.buttons`, a list of button labels.
+Given users `S` (sender), `L` (listener) and the webserver (`W`). `L` has `L.buttons`, a list of button labels. Assume 'S' has an existing, valid token, and 'L' does not.
 
-1. `S` and `L` independently connect and send `IDMessage` to `W`.
+1. `S` and `L` independently connect to `W`.
+   1. Both users log in.
+      - `S` sends `LoginMessage` to `W`, recieves `IDMessage` with `S.id`.
+      - `L` sends `NewIdMessage` to `W`, recieves `IDMessage` with `L.id`.
+      - Both store their tokens in their configuration file.
+   2. `S` and `L` independently communicate their respective IDs.
    - `S` now has `S.id` and `L` has `L.id`
 2. `S` sends `RequestMessage` to `W`, with `peerId: L.id`.
    1. `W` adds `S` to `L.pendingQueue`
