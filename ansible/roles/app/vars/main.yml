@@ -1,4 +1,4 @@
-app_name: 'Beep Server'
+app_name: 'Beboop Server'
 app_repo: 'https://github.com/Nosler/beep-server'
 app_path: '~/beboop'
 pnpm_path: '/home/linuxuser/.local/share/pnpm/pnpm'
