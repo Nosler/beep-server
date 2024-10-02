@@ -17,10 +17,6 @@ Logger.setLevel(process.env.NODE_ENV === 'production' ? Logger.INFO : Logger.DEB
 
 const connections: Connections = {};
 
-app.get('/', (_, res) => {
-  res.redirect('https://github.com/Nosler/beep');
-});
-
 app.get('/livez', (_, res) => {
   res.send('Hey ;3');
 });
