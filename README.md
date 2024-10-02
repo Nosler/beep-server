@@ -2,6 +2,12 @@
 
 server 4 beep
 
+# How to run
+
+```
+ansible-playbook -i ansible/inventory ansible/deploy.yml
+```
+
 ## Todo
 
 - SSL Encryption
