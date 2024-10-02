@@ -1,6 +1,6 @@
 {
-  "name": "beep-server",
-  "version": "0.0.0",
+  "name": "beboop-server",
+  "version": "0.0.1",
   "description": "Tiny server for the beep app",
   "engines": {
     "node": ">= 20"
