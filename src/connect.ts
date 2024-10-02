@@ -1,9 +1,14 @@
-import { InvalidDataError } from './errors';
+import Logger from 'js-logger';
+import { InvalidDataError, PeerDisconnectedError } from './errors';
 import { createRequestMessage } from './messages/createMessage';
 import { Connection, Connections } from './types';
 import { Websocket } from 'hyper-express';
 
 export function requestListen(connections: Connections, from: string, to: string) {
+  if (!connections[to]) {
+    throw new PeerDisconnectedError('Peer not found.');
+  }
+  Logger.debug('Requesting listen: \n', connections[to]);
   connections[to].pendingQueue.push(from);
   getNext(connections, to);
 }
