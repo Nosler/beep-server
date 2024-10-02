@@ -34,7 +34,8 @@ app.ws('/connect', (ws) => {
       if (e instanceof BeepError) {
         ws.send(JSON.stringify(createErrorMessage(e.message, e.code)));
       } else {
-        Logger.error(e);
+        const prefix = (ctx.id || 'NewUser') + ': ';
+        Logger.error(prefix + e);
       }
     }
   });
